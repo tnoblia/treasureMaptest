@@ -1,0 +1,15 @@
+h1{
+    text-align: center;
+    margin: 40px;
+}
+
+body{
+    background-color: rgb(196, 218, 212);
+    font-size: large;
+}
+
+.container{
+    width: 40%; /* or any specific width */
+    margin: 0 auto; /* Auto margins work with a defined width */
+    text-align: justify; /* Centers text inside the container */
+}
