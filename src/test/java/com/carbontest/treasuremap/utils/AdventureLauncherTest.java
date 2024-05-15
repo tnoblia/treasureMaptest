@@ -3,10 +3,7 @@ package com.carbontest.treasuremap.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.carbontest.treasuremap.entity.factories.AdventurerFactory;
-import com.carbontest.treasuremap.entity.factories.MountainFactory;
-import com.carbontest.treasuremap.entity.factories.TreasurePlaceFactory;
+import com.carbontest.treasuremap.entity.Adventurer;
+import com.carbontest.treasuremap.entity.Mountain;
+import com.carbontest.treasuremap.entity.Position;
+import com.carbontest.treasuremap.entity.TreasurePlace;
 import com.carbontest.treasuremap.entity.interfaces.IEntity;
-import com.carbontest.treasuremap.entity.interfaces.IMovable;
-import com.carbontest.treasuremap.entity.interfaces.IStackable;
 import com.carbontest.treasuremap.enums.Orientation;
 import com.carbontest.treasuremap.utils.interfaces.IAdventureLauncher;
 
@@ -31,21 +27,13 @@ public class AdventureLauncherTest {
 	@Autowired
 	private IAdventureLauncher adventureLauncher;
 	
-	@Autowired
-	private AdventurerFactory adventurerFactory;
-	 
-	@Autowired
-	private MountainFactory mountainFactory;
+	private Position borderIntersections;
+	private Adventurer adventurer;
+	private Adventurer adventurer2;
 	
-	@Autowired
-	private TreasurePlaceFactory treasurePlaceFactory;
+	private Mountain mountain;
 	
-	private IMovable adventurer;
-	private IMovable adventurer2;
-	
-	private IEntity mountain;
-	
-	private IStackable treasurePlace;
+	private TreasurePlace treasurePlace;
 	
 	@BeforeEach
 	public void testSetup() {
@@ -55,19 +43,19 @@ public class AdventureLauncherTest {
 		  *   - - - 
 		  * */
 		 List<IEntity> entitiesList = new ArrayList<>();
-		 this.adventurer = this.adventurerFactory.createAdventurer("Jeannot", 1, 0, "S", "AGAGAGAAAGAAAGAAAGAAAGAAAAAGA");
-		 this.adventurer2 = this.adventurerFactory.createAdventurer("Jeannette", 2, 1, "N", "DGAAAAAAAAAAGAAAAAAAADDDAA");
-		 this.mountain = this.mountainFactory.createMountain( 1, 1);
-		 this.treasurePlace = this.treasurePlaceFactory.createTreasurePlace( 0, 0,10);
+		 this.borderIntersections = new Position( 3,3);
+		 this.adventurer = new Adventurer("Jeannot", 1, 0, "S", "AGAGAGAAAGAAAGAAAGAAAGAAAAAGA");
+		 this.adventurer2 =new Adventurer("Jeannette", 2, 1, "N", "DGAAAAAAAAAAGAAAAAAAADDDAA");
+		 this.mountain = new Mountain( 1, 1);
+		 this.treasurePlace = new TreasurePlace( 0, 0,10);
 		 
+		 entitiesList.add(borderIntersections);
 		 entitiesList.add(adventurer);
 		 entitiesList.add(mountain);
 		 entitiesList.add(treasurePlace);
 		 entitiesList.add(adventurer2);
 		 
 		 this.adventureLauncher.setEntitiesList(entitiesList);
-		 this.adventureLauncher.setMapXSize(3);
-		 this.adventureLauncher.setMapYSize(3);
 		}
 	 
 	 @AfterEach
@@ -77,7 +65,7 @@ public class AdventureLauncherTest {
 	 
 	 @Test
 	 public void retrieveMovablesFromEntitiesListTest() {
-		 List<IMovable> AdventurerRetrieved = this.adventureLauncher.retrieveMovablesFromEntitiesList();
+		 List<Adventurer> AdventurerRetrieved = this.adventureLauncher.retrieveAdventurersFromEntitiesList();
 		 assertEquals("Jeannot",AdventurerRetrieved.get(0).getName(),"Name of adventurer retrieved should be Jeannot");
 		 assertEquals("Jeannette",AdventurerRetrieved.get(1).getName(),"Name of adventurer retrieved should be Jeannette");
 		 assertEquals(2,AdventurerRetrieved.size(),"There should be two movable entitiies (adventurer)");
@@ -85,7 +73,7 @@ public class AdventureLauncherTest {
 	 
 	 @Test
 	 public void retrieveStackablesFromEntitiesListTest() {
-		 List<IStackable> TreasuresRetrieved = this.adventureLauncher.retrieveStackablesFromEntitiesList();
+		 List<TreasurePlace> TreasuresRetrieved = this.adventureLauncher.retrieveTreasurePlacesFromEntitiesList();
 		 assertEquals(1,TreasuresRetrieved.size(),"There should be one stackable entity (treasure place)");
 		 assertEquals(10,TreasuresRetrieved.get(0).getNumberTreasures(),"First treasure place should shed 10 treasures");
 	 }
@@ -93,11 +81,11 @@ public class AdventureLauncherTest {
 	 @Test
 	 public void retrieveUnstackablesFromEntitiesListTest() {
 		 List<IEntity> entitiesRetrieved = this.adventureLauncher.retrieveUnstackablesFromEntitiesList();
-		 assertEquals(3,entitiesRetrieved.size(),"There should be three unstackable entities (2 adventurers and one mountain");
-		 assertEquals("Jeannot",((IMovable)entitiesRetrieved.get(0)).getName(),"First entity in list should be an adventurer (named Jeannot)");
-		 assertEquals("Jeannette",((IMovable)entitiesRetrieved.get(2)).getName(),"Last entity in list should be an adventurer (named Jeannette)");
-		 assertEquals(1,entitiesRetrieved.get(1).getXPosition(),"Second entity in list should be the mountain, coordinates (x:0,y:0)");
-		 assertEquals(1,entitiesRetrieved.get(1).getYPosition(),"Second entity in list should be the mountain, coordinates (x:0,y:0)");
+		 assertEquals(4,entitiesRetrieved.size(),"There should be four unstackable entities");
+		 assertEquals("Jeannot",((Adventurer)entitiesRetrieved.get(1)).getName(),"First entity in list should be an adventurer (named Jeannot)");
+		 assertEquals("Jeannette",((Adventurer)entitiesRetrieved.get(3)).getName(),"Last entity in list should be an adventurer (named Jeannette)");
+		 assertEquals(1,entitiesRetrieved.get(2).getXPosition(),"Second entity in list should be the mountain, coordinates (x:0,y:0)");
+		 assertEquals(1,entitiesRetrieved.get(2).getYPosition(),"Second entity in list should be the mountain, coordinates (x:0,y:0)");
 		  
 	 }
 	 
@@ -247,26 +235,5 @@ public class AdventureLauncherTest {
 
 		 assertEquals(7,this.treasurePlace.getNumberTreasures(),"Treasure place should have 7 treasures left");
 
-	 }
-	 
-	 @Test
-	 public void MapParamsToString() {
-		 assertEquals("C - 3 - 3\n"
-		 		+ "M - 1 - 1\n"
-		 		+ "T - 0 - 0 - 10\n"
-		 		+ "A - Jeannot - 1 - 0 - S - 0\n"
-		 		+ "A - Jeannette - 2 - 1 - N - 0\n",
-		 		this.adventureLauncher.finalMapParamsToString(),
-		 		"Final string is not what is expected");
-		 
-		 this.adventureLauncher.launchAdventures();
-		 
-		 assertEquals("C - 3 - 3\n"
-		 		+ "M - 1 - 1\n"
-		 		+ "T - 0 - 0 - 7\n"
-		 		+ "A - Jeannot - 0 - 1 - S - 2\n"
-		 		+ "A - Jeannette - 0 - 2 - S - 1\n",
-			 		this.adventureLauncher.finalMapParamsToString(),
-			 		"Final string is not what is expected");
 	 }
 }

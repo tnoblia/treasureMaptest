@@ -3,22 +3,20 @@ package com.carbontest.treasuremap.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.carbontest.treasuremap.entity.interfaces.IMovable;
+import com.carbontest.treasuremap.entity.interfaces.IEntity;
 import com.carbontest.treasuremap.enums.AdventurerMove;
 import com.carbontest.treasuremap.enums.Orientation;
 
-public class Adventurer implements IMovable{
+public class Adventurer implements IEntity{
 	
-	private int xPosition;
-	private int yPosition;
+	private Position position;
 	private Orientation orientation;
 	private int numberTreasures;
 	private String name;
 	private List<AdventurerMove> pattern;
 	
 	public Adventurer(String name,int xPosition, int yPosition, String orientation,String pattern) {
-		this.xPosition = xPosition;
-		this.yPosition = yPosition;
+		this.position = new Position(xPosition,yPosition);
 		this.orientation = Orientation.fromLetter(orientation);
 		this.name = name;
 		this.pattern = new ArrayList<>();
@@ -114,6 +112,28 @@ public class Adventurer implements IMovable{
 		}
 	}
 	
+	public int getXPosition() {
+		return position.getXPosition();
+	}
+	
+	public void setXPosition(int xPosition) {
+		this.position.setXPosition(xPosition);
+	}
+	
+	public int getYPosition() {
+		return position.getYPosition();
+	}
+	
+	public void setYPosition(int yPosition) {
+		this.position.setYPosition(yPosition);
+	}
+	
+	public Position getPosition() {
+		return this.position;
+	}
+	
+	
+	
 	public int getNumberTreasures() {
 		return numberTreasures;
 	}
@@ -130,21 +150,6 @@ public class Adventurer implements IMovable{
 		this.orientation = orientation;
 	}
 	
-	public int getXPosition() {
-		return xPosition;
-	}
-	
-	public void setXPosition(int xPosition) {
-		this.xPosition = xPosition;
-	}
-	
-	public int getYPosition() {
-		return yPosition;
-	}
-	
-	public void setYPosition(int yPosition) {
-		this.yPosition = yPosition;
-	}
 	
 	public String getName() {
 		return name;

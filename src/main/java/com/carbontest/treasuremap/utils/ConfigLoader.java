@@ -7,23 +7,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 
 import com.carbontest.treasuremap.utils.interfaces.IConfigLoader;
 
+@Component
 public class ConfigLoader implements IConfigLoader{
     
-    private Resource resourceFile;
+    private ResourceLoader resourceLoader;
 
-    
-	public ConfigLoader(Resource resourceFile) {
-    	this.resourceFile= resourceFile;
+	public ConfigLoader(@Autowired ResourceLoader resourceLoader) {
+    	this.resourceLoader = resourceLoader;
     }
 	
     public InputStream loadResource() {
     	InputStream input=null;
         try{
-            input = this.getResourceFile().getInputStream();
+        	Resource resource = resourceLoader.getResource("classpath:map.cfg");
+            input = resource.getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,14 +62,14 @@ public class ConfigLoader implements IConfigLoader{
     	return filteredlistParameters;
     }
     
+    public ResourceLoader getResourceLoader() {
+		return resourceLoader;
+	}
     
-    //Getters and setters
-    public Resource getResourceFile() {
-		return resourceFile;
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
 	}
 
-	public void setResourceFile(Resource resourceFile) {
-		this.resourceFile = resourceFile;
-	}
+
     
 }

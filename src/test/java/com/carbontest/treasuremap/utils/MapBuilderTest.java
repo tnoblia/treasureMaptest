@@ -5,15 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.carbontest.treasuremap.entity.interfaces.IMovable;
-import com.carbontest.treasuremap.entity.interfaces.IStackable;
+import com.carbontest.treasuremap.entity.Adventurer;
+import com.carbontest.treasuremap.entity.TreasurePlace;
+import com.carbontest.treasuremap.entity.interfaces.IEntity;
 import com.carbontest.treasuremap.enums.Orientation;
 import com.carbontest.treasuremap.utils.interfaces.IMapBuilder;
 
@@ -29,16 +29,11 @@ public class MapBuilderTest {
 		 this.mapBuilder.setMapConfig(Arrays.asList("C-5-4","M-1-1","T-3-2-4","M-2-2","A-Jean-1-2-S-DDADADADAGD","T-3-3-10"));
 		}
 	 
-	 @AfterEach
-	public void testCleanUp() {
-		 this.mapBuilder.getEntitiesList().clear();
-		}
-	 
 	 @Test
 	 public void buildOfDraftMap() {
-		 this.mapBuilder.setMapLimitsFromConfig();
-		 assertEquals(4,this.mapBuilder.getMapLimits().get("YSize"),"Size of map draft on y axis should be 4");
-		 assertEquals(5,this.mapBuilder.getMapLimits().get("XSize"),"Size of map draft on x axis should be 5");
+		 this.mapBuilder.buildMapAndEntities();
+		 assertEquals(4,this.mapBuilder.getEntitiesList().get(0).getYPosition(),"Size of map draft on y axis should be 4");
+		 assertEquals(5,this.mapBuilder.getEntitiesList().get(0).getXPosition(),"Size of map draft on x axis should be 5");
 	 }
 	 
 	 @Test
@@ -53,19 +48,19 @@ public class MapBuilderTest {
 	 @Test
 	 public void setAdventurerInEntitiesList() {
 		 this.mapBuilder.setAdventurers();
-		 assertEquals("Jean",((IMovable) this.mapBuilder.getEntitiesList().get(0)).getName(),"Name of the adventurer should be Jean");
-		 assertEquals(1,((IMovable) this.mapBuilder.getEntitiesList().get(0)).getXPosition(),"X position of the adventurer should be 1");
-		 assertEquals(2,((IMovable) this.mapBuilder.getEntitiesList().get(0)).getYPosition(),"Y position of the adventurer should be 2");
-		 assertEquals(Orientation.SUD,((IMovable) this.mapBuilder.getEntitiesList().get(0)).getOrientation(),"Orientaition of the adventurer should be South");
+		 assertEquals("Jean",((Adventurer) this.mapBuilder.getEntitiesList().get(0)).getName(),"Name of the adventurer should be Jean");
+		 assertEquals(1,((Adventurer) this.mapBuilder.getEntitiesList().get(0)).getXPosition(),"X position of the adventurer should be 1");
+		 assertEquals(2,((Adventurer) this.mapBuilder.getEntitiesList().get(0)).getYPosition(),"Y position of the adventurer should be 2");
+		 assertEquals(Orientation.SUD,((Adventurer) this.mapBuilder.getEntitiesList().get(0)).getOrientation(),"Orientaition of the adventurer should be South");
 	 }
 	 
 	 @Test
 	 public void setTreasurePlacesInEntitiesList() {
 		 this.mapBuilder.setTreasures();
-		 assertEquals(3,((IStackable) this.mapBuilder.getEntitiesList().get(0)).getXPosition(),"X position of the first treasure place should be 3");
-		 assertEquals(2,((IStackable) this.mapBuilder.getEntitiesList().get(0)).getYPosition(),"Y position of the first treasure place should be 2");
-		 assertEquals(4,((IStackable) this.mapBuilder.getEntitiesList().get(0)).getNumberTreasures(),"Number of treasures in first treasure place should be 4");
-		 assertEquals(10,((IStackable) this.mapBuilder.getEntitiesList().get(1)).getNumberTreasures(),"Number of treasures in second treasure place should be 10");
+		 assertEquals(3,((TreasurePlace) this.mapBuilder.getEntitiesList().get(0)).getXPosition(),"X position of the first treasure place should be 3");
+		 assertEquals(2,((TreasurePlace) this.mapBuilder.getEntitiesList().get(0)).getYPosition(),"Y position of the first treasure place should be 2");
+		 assertEquals(4,((TreasurePlace) this.mapBuilder.getEntitiesList().get(0)).getNumberTreasures(),"Number of treasures in first treasure place should be 4");
+		 assertEquals(10,((TreasurePlace) this.mapBuilder.getEntitiesList().get(1)).getNumberTreasures(),"Number of treasures in second treasure place should be 10");
 	 }
 	 
 	 @Test
@@ -74,7 +69,7 @@ public class MapBuilderTest {
 		 Throwable thrown = assertThrows(IllegalArgumentException.class,()->{
 				this.mapBuilder.setMountains();
 				},"Expect an illegal argument exception when reviewing X entity ");
-		 assertEquals("Entities should be symbolized by one of these symbols : [A, M, T, C]. No entity type like X"
+		 assertEquals("Entities should be symbolized by one of these symbols : [C,M,T,A]. No entity type like X"
 				 ,thrown.getMessage(),"ArrayIndexOutOfBoundsException message for adventurer should be personalized");
 
 	 }
@@ -92,7 +87,7 @@ public class MapBuilderTest {
 		//set incomplete map : 
 		 this.mapBuilder.setMapConfig(Arrays.asList("C-5","T-1-1-4"));
 		 Throwable thrownC = assertThrows(ArrayIndexOutOfBoundsException.class,()->{
-				this.mapBuilder.setMapLimitsFromConfig();
+				this.mapBuilder.buildMapAndEntities();
 				},"Expect an ArrayIndexOutOfBounds exception when reviewing incomplete C entity ");
 		 assertEquals("Map entity should have 2 coordinates x and y : Index 2 out of bounds for length 2"
 				 ,thrownC.getMessage(),"ArrayIndexOutOfBoundsException message for map limits should be personalized");
@@ -127,7 +122,7 @@ public class MapBuilderTest {
 		//set wrong type of parameter for map : 
 		 this.mapBuilder.setMapConfig(Arrays.asList("C-5-Y","T-1-1-4"));
 		 Throwable thrownC = assertThrows(NumberFormatException.class,()->{
-				this.mapBuilder.setMapLimitsFromConfig();
+				this.mapBuilder.buildMapAndEntities();
 				},"Expect an NumberFormatException exception when entering string instead of int for C entity");
 		 assertEquals("Coordinates of map borders should be integers, error : For input string: \"Y\""
 				 ,thrownC.getMessage(),"NumberFormatException message for map limits should be personalized");
@@ -156,7 +151,7 @@ public class MapBuilderTest {
 		 Throwable thrown1 = assertThrows(IllegalArgumentException.class,()->{
 				this.mapBuilder.setAdventurers();
 				},"Expect an IllegalArgumentException exception when entering wrong orientation for A entity ");
-		 assertEquals("For adventurer, orientation symbols should be in list [O, E, S, N]  and move symbols should be in list [A, G, D]. No orientation with cardinal point Q"
+		 assertEquals("For adventurer, orientation symbols should be in list [N,E,S,O] and move symbols should be in list [A,G,D] No orientation with cardinal point Q"
 				 ,thrown1.getMessage(),"NumberFormatException message for adventurer should be personalized");
 
 		//set wrong pattern for adventurer : 
@@ -164,7 +159,7 @@ public class MapBuilderTest {
 		 Throwable thrown2 = assertThrows(IllegalArgumentException.class,()->{
 				this.mapBuilder.setAdventurers();
 				},"Expect an IllegalArgumentException exception when entering wrong pattern for A entity ");
-		 assertEquals("For adventurer, orientation symbols should be in list [O, E, S, N]  and move symbols should be in list [A, G, D]. No move like Q"
+		 assertEquals("For adventurer, orientation symbols should be in list [N,E,S,O] and move symbols should be in list [A,G,D] No move like Q"
 				 ,thrown2.getMessage(),"NumberFormatException message for adventurer should be personalized");
 
 	 }

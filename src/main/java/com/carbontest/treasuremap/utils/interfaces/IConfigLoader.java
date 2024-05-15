@@ -3,7 +3,7 @@ package com.carbontest.treasuremap.utils.interfaces;
 import java.io.InputStream;
 import java.util.List;
 
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 public interface IConfigLoader {
 	
@@ -11,6 +11,6 @@ public interface IConfigLoader {
 	public String getMapString();
 	public List<String> getMapParameters();
 	
-	public Resource getResourceFile();
-	public void setResourceFile(Resource resourceFile);
+	public ResourceLoader getResourceLoader();
+	public void setResourceLoader(ResourceLoader resourceLoader);
 }

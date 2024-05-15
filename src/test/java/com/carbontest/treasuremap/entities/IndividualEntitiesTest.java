@@ -7,16 +7,12 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.carbontest.treasuremap.entity.factories.AdventurerFactory;
-import com.carbontest.treasuremap.entity.factories.MountainFactory;
-import com.carbontest.treasuremap.entity.factories.TreasurePlaceFactory;
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
-import com.carbontest.treasuremap.entity.interfaces.IMovable;
-import com.carbontest.treasuremap.entity.interfaces.IStackable;
+import com.carbontest.treasuremap.entity.Adventurer;
+import com.carbontest.treasuremap.entity.Mountain;
+import com.carbontest.treasuremap.entity.TreasurePlace;
 import com.carbontest.treasuremap.enums.AdventurerMove;
 import com.carbontest.treasuremap.enums.Orientation;
 
@@ -24,26 +20,18 @@ import com.carbontest.treasuremap.enums.Orientation;
 @ActiveProfiles("test")
 public class IndividualEntitiesTest {
 	
-	@Autowired
-	private AdventurerFactory adventurerFactory;
-	 
-	@Autowired
-	private MountainFactory mountainFactory;
 	
-	@Autowired
-	private TreasurePlaceFactory treasurePlaceFactory;
+	private Adventurer adventurer;
 	
-	private IMovable adventurer;
+	private Mountain mountain;
 	
-	private IEntity mountain;
-	
-	private IStackable treasurePlace;
+	private TreasurePlace treasurePlace;
 
 	@BeforeEach
 	public void testSetup() {
-		 this.adventurer = this.adventurerFactory.createAdventurer("Jeannot", 0, 0, "S", "AAAADD");
-		 this.mountain = this.mountainFactory.createMountain( 2, 2);
-		 this.treasurePlace = this.treasurePlaceFactory.createTreasurePlace( 1, 1,2);
+		 this.adventurer = new Adventurer("Jeannot", 0, 0, "S", "AAAADD");
+		 this.mountain = new Mountain(2, 2);
+		 this.treasurePlace = new TreasurePlace( 1, 1,2);
 		}
 	
 	@Test
@@ -68,10 +56,10 @@ public class IndividualEntitiesTest {
 	@Test
 	public void entityErrorInitializationWithWrongArgumentsTest() {
 		assertThrows(IllegalArgumentException.class,()->{
-			this.adventurerFactory.createAdventurer("Jeannot", 0, 0, "Q", "AAAADD");
+			new Adventurer("Jeannot", 0, 0, "Q", "AAAADD");
 			},"Expect an illegal argument exception when setting adventurer with wrong orientation ");
 		assertThrows(IllegalArgumentException.class,()->{
-			this.adventurerFactory.createAdventurer("Jeannot", 0, 0, "S", "AAQADD");
+			new Adventurer("Jeannot", 0, 0, "S", "AAQADD");
 			},"Expect an illegal argument exception when setting adventurer with wrong pattern step Q");
 	}
 	

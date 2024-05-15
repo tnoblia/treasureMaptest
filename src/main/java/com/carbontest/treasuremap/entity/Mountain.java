@@ -4,28 +4,31 @@ import com.carbontest.treasuremap.entity.interfaces.IEntity;
 
 public class Mountain implements IEntity{
 	
-	private int xPosition;
-	private int yPosition;
+	private Position position;
+	
 	
 	public Mountain(int xPosition,int yPosition) {
-		this.setXPosition(xPosition);
-		this.setYPosition(yPosition);
+		this.position = new Position(xPosition,yPosition);
 	}
 	
 	public int getXPosition() {
-		return xPosition;
+		return position.getXPosition();
 	}
 	
 	public void setXPosition(int xPosition) {
-		this.xPosition = xPosition;
+		this.position.setXPosition(xPosition);
 	}
 	
 	public int getYPosition() {
-		return yPosition;
+		return position.getYPosition();
 	}
 	
 	public void setYPosition(int yPosition) {
-		this.yPosition = yPosition;
+		this.position.setYPosition(yPosition);
+	}
+	
+	public Position getPosition() {
+		return this.position;
 	}
 	
 

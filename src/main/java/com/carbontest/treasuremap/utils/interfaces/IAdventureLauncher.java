@@ -2,22 +2,25 @@ package com.carbontest.treasuremap.utils.interfaces;
 
 import java.util.List;
 
+import com.carbontest.treasuremap.entity.Adventurer;
+import com.carbontest.treasuremap.entity.Position;
+import com.carbontest.treasuremap.entity.TreasurePlace;
 import com.carbontest.treasuremap.entity.interfaces.IEntity;
-import com.carbontest.treasuremap.entity.interfaces.IMovable;
-import com.carbontest.treasuremap.entity.interfaces.IStackable;
 
 public interface IAdventureLauncher {
 
-	List<IMovable> retrieveMovablesFromEntitiesList();
+	Position retrieveBordersIntersectionFromEntitiesList();
 
-	List<IStackable> retrieveStackablesFromEntitiesList();
+	List<Adventurer> retrieveAdventurersFromEntitiesList();
 
 	List<IEntity> retrieveUnstackablesFromEntitiesList();
 
-	//if adventurer is on a treasure place, he retrieves a treasure from it.
-	void lookForTreasureOnPlace(IMovable adventurer);
+	List<TreasurePlace> retrieveTreasurePlacesFromEntitiesList();
 
-	void settleOnPlaceAndLookForTreasureOrMoveBackward(IMovable adventurer);
+	//if adventurer is on a treasure place, he retrieves a treasure from it.
+	void lookForTreasureOnPlace(Adventurer adventurer);
+
+	void settleOnPlaceAndLookForTreasureOrMoveBackward(Adventurer adventurer);
 
 	void eachAdventurerMakeOneStep();
 
@@ -26,21 +29,9 @@ public interface IAdventureLauncher {
 	As long as one of the adventurer has at least one step remaining in the pattern
 	the loop keeps going. Steps are withdrawn in eachAdventurerMakeOneStep*/
 	void launchAdventures();
-	
-	public void writeFileWithFinalPlan();
-	
-	public String finalMapParamsToString();
 
 	List<IEntity> getEntitiesList();
 
 	void setEntitiesList(List<IEntity> entitiesList);
-	
-	public int getMapXSize();
-
-	public void setMapXSize(int mapXSize);
-
-	public int getMapYSize();
-
-	public void setMapYSize(int mapYSize);
 
 }

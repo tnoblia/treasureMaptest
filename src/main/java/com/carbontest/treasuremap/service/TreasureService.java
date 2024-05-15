@@ -1,7 +1,6 @@
 package com.carbontest.treasuremap.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +9,7 @@ import com.carbontest.treasuremap.entity.interfaces.IEntity;
 import com.carbontest.treasuremap.utils.interfaces.IAdventureLauncher;
 import com.carbontest.treasuremap.utils.interfaces.IConfigLoader;
 import com.carbontest.treasuremap.utils.interfaces.IMapBuilder;
+import com.carbontest.treasuremap.utils.interfaces.IOutputFileWriter;
 
 @Service
 public class TreasureService implements ITreasureService{
@@ -17,14 +17,16 @@ public class TreasureService implements ITreasureService{
 	private IMapBuilder mapBuilder;
 	private IAdventureLauncher adventureLauncher;
 	private IConfigLoader configLoader;
+	private IOutputFileWriter outputFileWriter;
 
 	public TreasureService(@Autowired IConfigLoader configLoader,
 							@Autowired IMapBuilder mapBuilder,
-							@Autowired IAdventureLauncher adventureLauncher) {
+							@Autowired IAdventureLauncher adventureLauncher,
+							@Autowired IOutputFileWriter outputFileWriter) {
 		this.configLoader = configLoader;
 		this.mapBuilder = mapBuilder;
 		this.adventureLauncher = adventureLauncher;
-		
+		this.outputFileWriter = outputFileWriter;
 	}
 	
 	 public void executeGame() {
@@ -36,18 +38,17 @@ public class TreasureService implements ITreasureService{
 			this.mapBuilder.setMapConfig(mapConfig);
 			List<IEntity> entitiesList = this.mapBuilder.setMountains()
 														.setTreasures().setAdventurers()
-														.getEntitiesList();
-			Map<String,Integer> mapLimits = this.mapBuilder.setMapLimitsFromConfig()
-															.getMapLimits();
+														.buildMapAndEntities();
 			
 			//Load the entities in adventureLauncher
 			this.adventureLauncher.setEntitiesList(entitiesList);
-			this.adventureLauncher.setMapXSize(mapLimits.get("XSize"));
-			this.adventureLauncher.setMapYSize(mapLimits.get("YSize"));
 			
 			//Launch the adventures and write final file
 			this.adventureLauncher.launchAdventures();
-			this.adventureLauncher.writeFileWithFinalPlan();
+			
+			this.outputFileWriter.setEntitiesList(this.adventureLauncher.getEntitiesList());
+			this.outputFileWriter.writeFileWithFinalPlan();
+			
 			
 		}catch (Exception e){
 			e.printStackTrace();

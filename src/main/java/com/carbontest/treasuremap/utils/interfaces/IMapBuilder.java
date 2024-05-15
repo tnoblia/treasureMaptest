@@ -1,62 +1,32 @@
 package com.carbontest.treasuremap.utils.interfaces;
 
 import java.util.List;
-import java.util.Map;
 
-import com.carbontest.treasuremap.entity.factories.interfaces.IEntityFactory;
-import com.carbontest.treasuremap.entity.factories.interfaces.IMovableFactory;
-import com.carbontest.treasuremap.entity.factories.interfaces.IStackableFactory;
 import com.carbontest.treasuremap.entity.interfaces.IEntity;
 import com.carbontest.treasuremap.enums.EntityType;
 
 public interface IMapBuilder {
 
 	//used to retrieve the parameter of each entity type from config
-		List<String> retrieveEntitiesParameters(EntityType entitytype);
+	public List<String> retrieveEntitiesParameters(EntityType entitytype);
+	
+	//Build mountains and put them in a list
+	IMapBuilder setMountains();
 
-		//Build empty first draft of the Treasure Chart
-		IMapBuilder setMapLimitsFromConfig();
+	//Build treasure places and put them in a list
+	IMapBuilder setTreasures();
 
-		//Build mountains and put them in a list
-		IMapBuilder setMountains();
+	//Build adventurers and put them in a list
+	IMapBuilder setAdventurers();
 
-		//Build treasure places and put them in a list
-		IMapBuilder setTreasures();
+	List<IEntity> buildMapAndEntities();
 
-		//Build adventurers and put them in a list
-		IMapBuilder setAdventurers();
+	List<String> getMapConfig();
 
-		Map<String, Integer> getMapLimits();
+	void setMapConfig(List<String> mapConfig);
 
-		List<IEntity> getEntitiesList();
-
-		void checkForEntitiesToNotStackOnEachOther() throws RuntimeException;
-
-		void checkForEntitiesOutOfMapBonds() throws RuntimeException;
-
-		//Getters and setters
-		IConfigLoader getConfigLoader();
-
-		void setConfigLoader(IConfigLoader configLoader);
-
-		IStackableFactory getTreasurePlaceFactory();
-
-		void setTreasurePlaceFactory(IStackableFactory treasurePlaceFactory);
-
-		IMovableFactory getAdventurerFactory();
-
-		void setAdventurerFactory(IMovableFactory adventurerFactory);
-
-		IEntityFactory getMountainFactory();
-
-		void setMountainFactory(IEntityFactory mountainFactory);
-
-		List<String> getMapConfig();
-
-		void setMapConfig(List<String> mapConfig);
-
-		void setEntitiesList(List<IEntity> entitiesList);
-		
-		public void getMapLimits(Map<String,Integer> mapLimits);
+	void setEntitiesList(List<IEntity> entitiesList);
+	
+	public List<IEntity> getEntitiesList();
 
 	}
