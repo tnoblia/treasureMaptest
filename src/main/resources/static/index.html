@@ -19,20 +19,15 @@
     </p>
     <p>
         Le service treasureMap orchestre ensuite 
-        les actions des 3 composants suivants : le ConfigLoader, le MapBuilder
-        et l'AdventureLauncher.
+        les actions des 4 composants suivants : le ConfigLoader, le MapBuilder, 
+        l'AdventureLauncher et le OutputFileWriter.
       </p>
       <ul>
         <li>ConfigLoader : lit le fichier en entrée et
             le convertit en paramètres lisibles par le mapBuilder. </li>
         <li>MapBuilder : lit les paramètres et construit la carte ainsi que les entités qui sont passées à l'AdventureLauncher.</li>
-        <li>AdventureLauncher :  exécute la séquence de mouvements et écrit
-        le fichier en sortie.</li>
-    </ul>
-    <p>Les chemins des fichiers d'entrée et de sortie sont définis dans le fichier application.properties de l'application Spring: </p>
-    <ul>
-        <li>Path fichier input : propriété spring.map.cfg.run (par défaut: file:C:/tmp/map.cfg).</li>
-        <li>Path fichier output : propriété spring.map.write.file (par défaut: C:/tmp/output.txt).</li>
+        <li>AdventureLauncher :  exécute la séquence de mouvements</li>
+        <li>OutputFileWriter :écrit le fichier en sortie.</li>
     </ul>
     </div>
   </body>
