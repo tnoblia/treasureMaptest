@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
+import com.carbontest.treasuremap.entity.base.IEntity;
 import com.carbontest.treasuremap.utils.interfaces.IAdventureLauncher;
 import com.carbontest.treasuremap.utils.interfaces.IConfigLoader;
 import com.carbontest.treasuremap.utils.interfaces.IMapBuilder;
@@ -47,7 +47,7 @@ public class TreasureService implements ITreasureService{
 			this.adventureLauncher.launchAdventures();
 			
 			this.outputFileWriter.setEntitiesList(this.adventureLauncher.getEntitiesList());
-			this.outputFileWriter.writeFileWithFinalPlan();
+			this.outputFileWriter.writeFile("output.txt");
 			
 			
 		}catch (Exception e){

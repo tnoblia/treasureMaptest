@@ -18,7 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles("test")
 public class configLoaderTest {
 	 
 	@MockBean
@@ -26,16 +25,17 @@ public class configLoaderTest {
 
 	@BeforeEach
 	public void testSetup() {
-		 String mockFileContent = "# {C comme Carte} - {Nb. de case en largeur} - {Nb. de case en hauteur}\r\n"
-				 + "# {M comme Montagne} - {Axe horizontal} - {Axe vertical}\r\n"
-				 + "# {T comme Trésor} - {Axe horizontal} - {Axe vertical} - {Nb. de trésors}\r\n"
-				 + "# {A comme Aventurier} - {Nom de l’aventurier} - {Axe horizontal} - {Axevertical} - {Orientation} - {Séquence de mouvement}\r\n"
-				 + "C - 5 - 5\r\n"
-				 + "M - 2 - 3\r\n"
-				 + "M - 3 - 2\r\n"
-				 + "T - 1 - 2 - 3\r\n"
-				 + "T - 1 - 3 - 3\r\n"
-				 + "A - Jean - 1 - 1 - S - AAGGADAADADDAD\r\n"
+		 String BACK_TO_LINE =  System.lineSeparator();
+		 String mockFileContent = "# {C comme Carte} - {Nb. de case en largeur} - {Nb. de case en hauteur}"+BACK_TO_LINE
+				 + "# {M comme Montagne} - {Axe horizontal} - {Axe vertical}"+BACK_TO_LINE
+				 + "# {T comme Trésor} - {Axe horizontal} - {Axe vertical} - {Nb. de trésors}"+BACK_TO_LINE
+				 + "# {A comme Aventurier} - {Nom de l’aventurier} - {Axe horizontal} - {Axevertical} - {Orientation} - {Séquence de mouvement}"+BACK_TO_LINE
+				 + "C - 5 - 5"+BACK_TO_LINE
+				 + "M - 2 - 3"+BACK_TO_LINE
+				 + "M - 3 - 2"+BACK_TO_LINE
+				 + "T - 1 - 2 - 3"+BACK_TO_LINE
+				 + "T - 1 - 3 - 3"+BACK_TO_LINE
+				 + "A - Jean - 1 - 1 - S - AAGGADAADADDAD"+BACK_TO_LINE
 				 + "A - Jules - 2 - 1 - S - AAAGAADAADAA";
         try ( InputStream inputStream = new ByteArrayInputStream(mockFileContent.getBytes(StandardCharsets.UTF_8))){
         	when(this.mockConfigLoader.loadResource()).thenReturn(inputStream);
@@ -55,17 +55,18 @@ public class configLoaderTest {
 	 
 	 @Test
 	 public void convertLoaderInputStreamToString() {
+		 String BACK_TO_LINE =  System.lineSeparator();
 		 String mapAsString = this.mockConfigLoader.getMapString();
-		 assertEquals("# {C comme Carte} - {Nb. de case en largeur} - {Nb. de case en hauteur}\r\n"
-				 + "# {M comme Montagne} - {Axe horizontal} - {Axe vertical}\r\n"
-				 + "# {T comme Trésor} - {Axe horizontal} - {Axe vertical} - {Nb. de trésors}\r\n"
-				 + "# {A comme Aventurier} - {Nom de l’aventurier} - {Axe horizontal} - {Axevertical} - {Orientation} - {Séquence de mouvement}\r\n"
-				 + "C - 5 - 5\r\n"
-				 + "M - 2 - 3\r\n"
-				 + "M - 3 - 2\r\n"
-				 + "T - 1 - 2 - 3\r\n"
-				 + "T - 1 - 3 - 3\r\n"
-				 + "A - Jean - 1 - 1 - S - AAGGADAADADDAD\r\n"
+		 assertEquals("# {C comme Carte} - {Nb. de case en largeur} - {Nb. de case en hauteur}"+BACK_TO_LINE
+				 + "# {M comme Montagne} - {Axe horizontal} - {Axe vertical}"+BACK_TO_LINE
+				 + "# {T comme Trésor} - {Axe horizontal} - {Axe vertical} - {Nb. de trésors}"+BACK_TO_LINE
+				 + "# {A comme Aventurier} - {Nom de l’aventurier} - {Axe horizontal} - {Axevertical} - {Orientation} - {Séquence de mouvement}"+BACK_TO_LINE
+				 + "C - 5 - 5"+BACK_TO_LINE
+				 + "M - 2 - 3"+BACK_TO_LINE
+				 + "M - 3 - 2"+BACK_TO_LINE
+				 + "T - 1 - 2 - 3"+BACK_TO_LINE
+				 + "T - 1 - 3 - 3"+BACK_TO_LINE
+				 + "A - Jean - 1 - 1 - S - AAGGADAADADDAD"+BACK_TO_LINE
 				 + "A - Jules - 2 - 1 - S - AAAGAADAADAA",
 				 mapAsString,
 				 "Converted inputStream as string is not equal to what is expected");

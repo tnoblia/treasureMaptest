@@ -7,10 +7,11 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.carbontest.treasuremap.entity.Adventurer;
+import com.carbontest.treasuremap.entity.BordersIntersection;
 import com.carbontest.treasuremap.entity.Mountain;
-import com.carbontest.treasuremap.entity.Position;
 import com.carbontest.treasuremap.entity.TreasurePlace;
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
+import com.carbontest.treasuremap.entity.base.IEntity;
+import com.carbontest.treasuremap.entity.utils.Position;
 import com.carbontest.treasuremap.enums.EntityType;
 import com.carbontest.treasuremap.utils.interfaces.IOutputFileWriter;
 
@@ -28,7 +29,7 @@ public class OutputFileWriter implements IOutputFileWriter{
 		StringBuilder mountainsParams = new StringBuilder("");
 		StringBuilder finalParams = new StringBuilder("");
 		for(IEntity entity:this.getEntitiesList()) {
-			if(entity instanceof Position) {
+			if(entity instanceof BordersIntersection) {
 				mapParams.append(EntityType.CARTE.getType());
 				mapParams.append(SEPARATOR);
 				mapParams.append(entity.getXPosition());
@@ -73,8 +74,8 @@ public class OutputFileWriter implements IOutputFileWriter{
 		return finalParams.toString();
 	}
 	
-	public void writeFileWithFinalPlan() {
-        try (FileWriter writer = new FileWriter("output.txt")) {
+	public void writeFile(String fileName) {
+        try (FileWriter writer = new FileWriter(fileName)) {
             writer.write(this.finalMapParamsToString());
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,0 +1,5 @@
+C - 3 - 3
+M - 1 - 1
+T - 0 - 0 - 10
+A - Jeannot - 1 - 0 - S - 2
+A - Jeannette - 2 - 1 - N - 3

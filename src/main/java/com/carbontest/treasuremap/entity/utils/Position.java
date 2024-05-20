@@ -1,8 +1,6 @@
-package com.carbontest.treasuremap.entity;
+package com.carbontest.treasuremap.entity.utils;
 
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
-
-public class Position implements IEntity{
+public class Position{
 	
 	private int xPosition;
 	private int yPosition;

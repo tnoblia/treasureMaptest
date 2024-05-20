@@ -3,13 +3,13 @@ package com.carbontest.treasuremap.utils.interfaces;
 import java.util.List;
 
 import com.carbontest.treasuremap.entity.Adventurer;
-import com.carbontest.treasuremap.entity.Position;
+import com.carbontest.treasuremap.entity.BordersIntersection;
 import com.carbontest.treasuremap.entity.TreasurePlace;
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
+import com.carbontest.treasuremap.entity.base.IEntity;
 
 public interface IAdventureLauncher {
 
-	Position retrieveBordersIntersectionFromEntitiesList();
+	BordersIntersection retrieveBordersIntersectionFromEntitiesList();
 
 	List<Adventurer> retrieveAdventurersFromEntitiesList();
 
@@ -24,10 +24,6 @@ public interface IAdventureLauncher {
 
 	void eachAdventurerMakeOneStep();
 
-	/*The for loop is not used to loop through each adventurer but rather
-	to get the adventurer with the biggest pattern.
-	As long as one of the adventurer has at least one step remaining in the pattern
-	the loop keeps going. Steps are withdrawn in eachAdventurerMakeOneStep*/
 	void launchAdventures();
 
 	List<IEntity> getEntitiesList();

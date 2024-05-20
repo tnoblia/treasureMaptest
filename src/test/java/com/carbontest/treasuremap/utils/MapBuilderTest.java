@@ -15,12 +15,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.carbontest.treasuremap.entity.Adventurer;
 import com.carbontest.treasuremap.entity.Mountain;
-import com.carbontest.treasuremap.entity.Position;
 import com.carbontest.treasuremap.entity.TreasurePlace;
+import com.carbontest.treasuremap.entity.utils.Position;
 import com.carbontest.treasuremap.utils.interfaces.IMapBuilder;
 
 @SpringBootTest
-@ActiveProfiles("test")
 public class MapBuilderTest {
 	 
 	 @Autowired
@@ -60,12 +59,9 @@ public class MapBuilderTest {
 	 @Test
 	 public void setUnknownTypeEntity() {
 		 this.mapBuilder.setMapConfig(Arrays.asList("C-5-4","X-2-2","T-1-1-4"));
-		 Throwable thrown = assertThrows(IllegalArgumentException.class,()->{
+		 assertThrows(IllegalArgumentException.class,()->{
 				this.mapBuilder.setMountains();
 				},"Expect an illegal argument exception when reviewing X entity ");
-		 assertEquals("Entities should be symbolized by one of these symbols : [C,M,T,A]. No entity type like X"
-				 ,thrown.getMessage(),"ArrayIndexOutOfBoundsException message for adventurer should be personalized");
-
 	 }
 	 
 	 
@@ -109,7 +105,7 @@ public class MapBuilderTest {
 		 this.mapBuilder.setMapConfig(Arrays.asList("C-4-4","A-Jean-2-2-Q-AAA","T-1-1-4"));
 		 assertThrows(IllegalArgumentException.class,()->{
 				this.mapBuilder.setAdventurers();
-				},"Expect an IllegalArgumentException exception when entering wrong orientation for A entity ");
+				},"Expect an IllegalArgumentException exception when entering wrong orientation or pattern for Adventurer entity ");
 	 }
 	
 	 

@@ -10,12 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.carbontest.treasuremap.entity.Adventurer;
-import com.carbontest.treasuremap.entity.Position;
 import com.carbontest.treasuremap.entity.TreasurePlace;
+import com.carbontest.treasuremap.entity.utils.Position;
 import com.carbontest.treasuremap.enums.Orientation;
 
 @SpringBootTest
-@ActiveProfiles("test")
 public class AdventurersFunctionalitiesTest {
 	
 	
@@ -42,9 +41,9 @@ public class AdventurersFunctionalitiesTest {
 		Orientation endOrientation = Orientation.fromLetter(endOrientationStr);
 		this.adventurer.setOrientation(beginOrientation);
 		this.adventurer.turnRight();
-		assertEquals(endOrientation,this.adventurer.getOrientation(),"Adventurer's orientation should be "+endOrientationStr);
+		assertEquals(endOrientation,this.adventurer.getOrientation(),"Adventurer's orientation is not right");
 		this.adventurer.turnLeft();
-		assertEquals(beginOrientation,this.adventurer.getOrientation(),"Adventurer's orientation should be back at "+beginOrientationStr);
+		assertEquals(beginOrientation,this.adventurer.getOrientation(),"Adventurer's orientation is not right");
 		
 	}
 	
@@ -62,9 +61,9 @@ public class AdventurersFunctionalitiesTest {
 		this.adventurer.moveForward();
 		Position beginPosition = new Position(0,0);
 		Position endPosition = new Position(endXPosition,endYPosition);
-		assertEquals(endPosition,this.adventurer.getPosition(),"Adventurer should be on position x : " +endXPosition+", y : "+endYPosition);
+		assertEquals(endPosition,this.adventurer.getPosition(),"Adventurer's position is not right");
 		this.adventurer.moveBackward();
-		assertEquals(beginPosition,this.adventurer.getPosition(),"Adventurer should be back on position x : 0, y : 0");
+		assertEquals(beginPosition,this.adventurer.getPosition(),"Adventurer's position is not right");
 	}
 	
 	@Test

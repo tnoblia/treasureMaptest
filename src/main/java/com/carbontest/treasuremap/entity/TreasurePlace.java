@@ -1,15 +1,14 @@
 package com.carbontest.treasuremap.entity;
 
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
+import com.carbontest.treasuremap.entity.base.Entity;
 
-public class TreasurePlace  implements IEntity{
+public class TreasurePlace  extends Entity{
 
-	private Position position;
 	private int numberTreasures;
 	
 	
 	public TreasurePlace(int xPosition, int yPosition, int numberTreasures) {
-		this.position = new Position(xPosition,yPosition);
+		super(xPosition,yPosition);
 		this.numberTreasures = numberTreasures;
 	}
 	
@@ -43,31 +42,10 @@ public class TreasurePlace  implements IEntity{
 		
 	}
 	
-	
-	public int getXPosition() {
-		return position.getXPosition();
-	}
-	
-	public void setXPosition(int xPosition) {
-		this.position.setXPosition(xPosition);
-	}
-	
-	public int getYPosition() {
-		return position.getYPosition();
-	}
-	
-	public void setYPosition(int yPosition) {
-		this.position.setYPosition(yPosition);
-	}
-	
 	public int getNumberTreasures() {
 		return numberTreasures;
 	}
-	
-	public Position getPosition() {
-		return this.position;
-	}
-	
+
 
 	
 

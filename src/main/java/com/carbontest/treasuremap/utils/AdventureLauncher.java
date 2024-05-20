@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.carbontest.treasuremap.entity.Adventurer;
-import com.carbontest.treasuremap.entity.Position;
+import com.carbontest.treasuremap.entity.BordersIntersection;
 import com.carbontest.treasuremap.entity.TreasurePlace;
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
+import com.carbontest.treasuremap.entity.base.IEntity;
 import com.carbontest.treasuremap.enums.AdventurerMove;
 import com.carbontest.treasuremap.utils.interfaces.IAdventureLauncher;
 
@@ -25,11 +25,11 @@ public class AdventureLauncher implements IAdventureLauncher {
 	}
 	
 	@Override
-	public Position retrieveBordersIntersectionFromEntitiesList(){
-		Position bordersIntersection = null;
+	public BordersIntersection retrieveBordersIntersectionFromEntitiesList(){
+		BordersIntersection bordersIntersection = null;
 		for (IEntity entity : this.getEntitiesList()) {
-			if(entity instanceof Position) {
-				bordersIntersection =  ((Position)entity);
+			if(entity instanceof BordersIntersection) {
+				bordersIntersection =  ((BordersIntersection)entity);
 			}
 		}
 		return bordersIntersection;
@@ -81,12 +81,9 @@ public class AdventureLauncher implements IAdventureLauncher {
 	@Override
 	public void settleOnPlaceAndLookForTreasureOrMoveBackward(Adventurer adventurer){
 		boolean adventurerSettles = true;
-		Position bordersIntersection = this.retrieveBordersIntersectionFromEntitiesList();
+		BordersIntersection bordersIntersection = this.retrieveBordersIntersectionFromEntitiesList();
 		//check if adventurer is out of map's bonds
-		if(adventurer.getXPosition()>= bordersIntersection.getXPosition() || adventurer.getXPosition()< 0
-			||adventurer.getYPosition()>= bordersIntersection.getYPosition() || adventurer.getYPosition()< 0) {
-			adventurerSettles = false;
-		}
+		adventurerSettles = bordersIntersection.encompassBetweenItselfAndOrigin(adventurer);
 		//check if adventurer landed on an unstackable object (ie: mountain or other adventurer)
 		for(IEntity unstackableEntity:this.retrieveUnstackablesFromEntitiesList()) {
 			if(unstackableEntity.getPosition().equals(adventurer.getPosition())

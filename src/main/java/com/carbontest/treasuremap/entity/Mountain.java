@@ -1,10 +1,12 @@
 package com.carbontest.treasuremap.entity;
 
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
+import com.carbontest.treasuremap.entity.base.Entity;
 
-public class Mountain implements IEntity{
+public class Mountain extends Entity{
 	
-	private Position position;
+	public Mountain(int xPosition, int yPosition) {
+		super(xPosition,yPosition);
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -21,30 +23,6 @@ public class Mountain implements IEntity{
 		sb.append("Mountain : ");
 		sb.append(this.getPosition());
 		return sb.toString();
-	}
-	
-	public Mountain(int xPosition,int yPosition) {
-		this.position = new Position(xPosition,yPosition);
-	}
-	
-	public int getXPosition() {
-		return position.getXPosition();
-	}
-	
-	public void setXPosition(int xPosition) {
-		this.position.setXPosition(xPosition);
-	}
-	
-	public int getYPosition() {
-		return position.getYPosition();
-	}
-	
-	public void setYPosition(int yPosition) {
-		this.position.setYPosition(yPosition);
-	}
-	
-	public Position getPosition() {
-		return this.position;
 	}
 	
 

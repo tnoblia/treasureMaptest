@@ -3,20 +3,19 @@ package com.carbontest.treasuremap.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
+import com.carbontest.treasuremap.entity.base.Entity;
 import com.carbontest.treasuremap.enums.AdventurerMove;
 import com.carbontest.treasuremap.enums.Orientation;
 
-public class Adventurer implements IEntity{
+public class Adventurer extends Entity{
 	
-	private Position position;
 	private Orientation orientation;
 	private int numberTreasures;
 	private String name;
 	private List<AdventurerMove> pattern;
 	
 	public Adventurer(String name,int xPosition, int yPosition, String orientation,String pattern) {
-		this.position = new Position(xPosition,yPosition);
+		super(xPosition,yPosition);
 		this.orientation = Orientation.fromLetter(orientation);
 		this.name = name;
 		this.pattern = new ArrayList<>();
@@ -137,30 +136,7 @@ public class Adventurer implements IEntity{
 		sb.append(this.getNumberTreasures());
 		return sb.toString();
 	}
-	
-	
-	public int getXPosition() {
-		return position.getXPosition();
-	}
-	
-	public void setXPosition(int xPosition) {
-		this.position.setXPosition(xPosition);
-	}
-	
-	public int getYPosition() {
-		return position.getYPosition();
-	}
-	
-	public void setYPosition(int yPosition) {
-		this.position.setYPosition(yPosition);
-	}
-	
-	public Position getPosition() {
-		return this.position;
-	}
-	
-	
-	
+
 	public int getNumberTreasures() {
 		return numberTreasures;
 	}

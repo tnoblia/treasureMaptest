@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.carbontest.treasuremap.entity.Adventurer;
+import com.carbontest.treasuremap.entity.BordersIntersection;
 import com.carbontest.treasuremap.entity.Mountain;
-import com.carbontest.treasuremap.entity.Position;
 import com.carbontest.treasuremap.entity.TreasurePlace;
-import com.carbontest.treasuremap.entity.interfaces.IEntity;
+import com.carbontest.treasuremap.entity.base.IEntity;
 import com.carbontest.treasuremap.enums.EntityType;
 import com.carbontest.treasuremap.utils.interfaces.IMapBuilder;
 
@@ -131,11 +131,11 @@ public class MapBuilder implements IMapBuilder{
 	@Override
 	public List<IEntity> buildMapAndEntities() {
 		String[] chartBondsParameters = this.retrieveEntitiesParameters(EntityType.CARTE).get(0).split("-");
-		IEntity bordersIntersection = null;
+		BordersIntersection bordersIntersection = null;
 		try {
 			int mapXSize = Integer.parseInt(chartBondsParameters[1]);
 			int mapYSize = Integer.parseInt(chartBondsParameters[2]);
-			bordersIntersection = new Position(mapXSize,mapYSize);
+			bordersIntersection = new BordersIntersection(mapXSize,mapYSize);
 		}catch(Exception e) {
 			if(e instanceof NumberFormatException) {
 				throw new NumberFormatException("Coordinates of map borders should be integers, error : "+e.getMessage());
@@ -145,9 +145,7 @@ public class MapBuilder implements IMapBuilder{
 			}
 		}
 		for(IEntity entity:this.entitiesList) {
-			if (entity.getXPosition()<0 && entity.getYPosition()<0
-					&& bordersIntersection.getXPosition() <= entity.getXPosition()
-					&& bordersIntersection.getYPosition() <= entity.getYPosition()) {
+			if (!(bordersIntersection.encompassBetweenItselfAndOrigin(entity))) {
 				String errorMessage = "An entity is out of the map bonds, entity is at x : "
 						+entity.getXPosition()+ " y : "+entity.getYPosition();
 				throw new RuntimeException(errorMessage);

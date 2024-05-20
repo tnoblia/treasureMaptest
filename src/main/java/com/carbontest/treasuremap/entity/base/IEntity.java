@@ -1,6 +1,6 @@
-package com.carbontest.treasuremap.entity.interfaces;
+package com.carbontest.treasuremap.entity.base;
 
-import com.carbontest.treasuremap.entity.Position;
+import com.carbontest.treasuremap.entity.utils.Position;
 
 public interface IEntity {
 
