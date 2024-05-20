@@ -21,6 +21,28 @@ public class TreasurePlace  implements IEntity{
 		return 0;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null || this.getClass()!= obj.getClass()) {
+			return false;
+		}
+		TreasurePlace comparedTreasure = (TreasurePlace) obj;
+		return comparedTreasure.getPosition().equals(this.getPosition())
+				&& comparedTreasure.getNumberTreasures() == this.getNumberTreasures() ;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("");
+		String SEPARATOR = " - ";
+		sb.append("Treasure place : ");
+		sb.append(this.getPosition());
+		sb.append(SEPARATOR);
+		sb.append(this.getNumberTreasures());
+		return sb.toString();
+		
+	}
+	
 	
 	public int getXPosition() {
 		return position.getXPosition();

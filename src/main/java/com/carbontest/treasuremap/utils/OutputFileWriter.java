@@ -70,7 +70,6 @@ public class OutputFileWriter implements IOutputFileWriter{
 		finalParams.append(mountainsParams.toString());
 		finalParams.append(treasurePlacesParams.toString());
 		finalParams.append(adventurersParams.toString());
-		System.out.println(finalParams);
 		return finalParams.toString();
 	}
 	

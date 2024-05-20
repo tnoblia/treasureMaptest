@@ -18,8 +18,20 @@ public class Position implements IEntity{
 			return false;
 		}
 		Position objectPosition = (Position) obj;
-		return xPosition == objectPosition.xPosition && yPosition == objectPosition.yPosition;
+		return this.getXPosition() == objectPosition.getXPosition()
+				&& this.getYPosition() == objectPosition.getYPosition();
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("");
+		sb.append("[x : ");
+		sb.append(this.getXPosition());
+		sb.append(", y : ");
+		sb.append(this.getYPosition());
+		sb.append("]");
+		return sb.toString();
+		}
 	
 	public int getXPosition() {
 		return xPosition;

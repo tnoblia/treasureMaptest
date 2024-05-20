@@ -4,6 +4,7 @@ public enum EntityType {
 	AVENTURIER('A'),
 	MONTAGNE('M'),
 	TRESOR('T'),
+	PLAINE('P'),
 	CARTE('C');
 	
 	private final char type;

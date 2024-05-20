@@ -83,10 +83,8 @@ public class AdventureLauncher implements IAdventureLauncher {
 		boolean adventurerSettles = true;
 		Position bordersIntersection = this.retrieveBordersIntersectionFromEntitiesList();
 		//check if adventurer is out of map's bonds
-		if(adventurer.getXPosition()>= bordersIntersection.getXPosition() || adventurer.getXPosition()< 0) {
-			adventurerSettles = false;
-		}
-		if(adventurer.getYPosition()>= bordersIntersection.getYPosition() || adventurer.getYPosition()< 0) {
+		if(adventurer.getXPosition()>= bordersIntersection.getXPosition() || adventurer.getXPosition()< 0
+			||adventurer.getYPosition()>= bordersIntersection.getYPosition() || adventurer.getYPosition()< 0) {
 			adventurerSettles = false;
 		}
 		//check if adventurer landed on an unstackable object (ie: mountain or other adventurer)

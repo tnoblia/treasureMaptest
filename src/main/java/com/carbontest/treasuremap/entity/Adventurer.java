@@ -112,6 +112,33 @@ public class Adventurer implements IEntity{
 		}
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null || this.getClass()!= obj.getClass()) {
+			return false;
+		}
+		Adventurer comparedAdventurer = (Adventurer) obj;
+		return comparedAdventurer.toString().equals(this.toString());
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("");
+		String SEPARATOR = " - ";
+		sb.append("Adventurer : ");
+		sb.append(this.getName());
+		sb.append(SEPARATOR);
+		sb.append(this.getPosition());
+		sb.append(SEPARATOR);
+		sb.append(this.getOrientation());
+		sb.append(SEPARATOR);
+		sb.append(this.getPattern());
+		sb.append(SEPARATOR);
+		sb.append(this.getNumberTreasures());
+		return sb.toString();
+	}
+	
+	
 	public int getXPosition() {
 		return position.getXPosition();
 	}

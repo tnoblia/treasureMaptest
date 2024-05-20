@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -58,137 +60,100 @@ public class AdventureLauncherTest {
 		 this.adventureLauncher.setEntitiesList(entitiesList);
 		}
 	 
-	 @AfterEach
-	public void testCleanUp() {
-		 this.adventureLauncher.getEntitiesList().clear();
-		}
-	 
 	 @Test
-	 public void retrieveMovablesFromEntitiesListTest() {
+	 public void retrieveBordersIntersectionFromEntitiesListTest() {
+		 Position retrievedBordersIntersection = this.adventureLauncher.retrieveBordersIntersectionFromEntitiesList();
+		 assertEquals(this.borderIntersections,retrievedBordersIntersection,"Borders intersection should be properly retrieved");
+	}
+	 @Test
+	 public void retrieveAdventurersFromEntitiesListTest() {
 		 List<Adventurer> AdventurerRetrieved = this.adventureLauncher.retrieveAdventurersFromEntitiesList();
-		 assertEquals("Jeannot",AdventurerRetrieved.get(0).getName(),"Name of adventurer retrieved should be Jeannot");
-		 assertEquals("Jeannette",AdventurerRetrieved.get(1).getName(),"Name of adventurer retrieved should be Jeannette");
-		 assertEquals(2,AdventurerRetrieved.size(),"There should be two movable entitiies (adventurer)");
+		 assertEquals(this.adventurer,AdventurerRetrieved.get(0),"Name of adventurer retrieved should be Jeannot");
+		 assertEquals(2,AdventurerRetrieved.size(),"There should be two movable adventurers");
 	 }
 	 
 	 @Test
-	 public void retrieveStackablesFromEntitiesListTest() {
-		 List<TreasurePlace> TreasuresRetrieved = this.adventureLauncher.retrieveTreasurePlacesFromEntitiesList();
-		 assertEquals(1,TreasuresRetrieved.size(),"There should be one stackable entity (treasure place)");
-		 assertEquals(10,TreasuresRetrieved.get(0).getNumberTreasures(),"First treasure place should shed 10 treasures");
-	 }
+	 public void retrieveTreasurePlacesFromEntitiesListTest() {
+		 List<TreasurePlace> treasuresRetrieved = this.adventureLauncher.retrieveTreasurePlacesFromEntitiesList();
+		 assertEquals(this.treasurePlace,treasuresRetrieved.get(0),"Name of adventurer retrieved should be Jeannot");
+		 assertEquals(1,treasuresRetrieved.size(),"There should be two movable adventurers");
+		 }
 	 
 	 @Test
 	 public void retrieveUnstackablesFromEntitiesListTest() {
-		 List<IEntity> entitiesRetrieved = this.adventureLauncher.retrieveUnstackablesFromEntitiesList();
-		 assertEquals(4,entitiesRetrieved.size(),"There should be four unstackable entities");
-		 assertEquals("Jeannot",((Adventurer)entitiesRetrieved.get(1)).getName(),"First entity in list should be an adventurer (named Jeannot)");
-		 assertEquals("Jeannette",((Adventurer)entitiesRetrieved.get(3)).getName(),"Last entity in list should be an adventurer (named Jeannette)");
-		 assertEquals(1,entitiesRetrieved.get(2).getXPosition(),"Second entity in list should be the mountain, coordinates (x:0,y:0)");
-		 assertEquals(1,entitiesRetrieved.get(2).getYPosition(),"Second entity in list should be the mountain, coordinates (x:0,y:0)");
-		  
+		 List<IEntity> unstackablesRetrieved = this.adventureLauncher.retrieveUnstackablesFromEntitiesList();
+		 assertEquals(4,unstackablesRetrieved.size(),"There should be four entities that are unstackable");
+		   
 	 }
 	 
-	 @Test
-	 public void LookForTreasureTest() {
-		 //Make the adventurer look for a treasure where there is no treasure place
-		 this.adventureLauncher.lookForTreasureOnPlace(this.adventurer);
-		 assertEquals(0,this.adventurer.getNumberTreasures(),"Adventurer should have not found any treasure on that place");
-		 assertEquals(10,this.treasurePlace.getNumberTreasures(),"treasure place should still have 10 treasures");
-
-		 //Position adventurer on treasure place and verify position
-		 this.adventurer.turnRight();
-		 this.adventurer.moveForward();
-		 assertEquals(0,this.adventurer.getXPosition(),"Adventurer should be placed on the same x axis as treasure place x:0");
-		 assertEquals(0,this.adventurer.getYPosition(),"Adventurer should be placed on the same y axis as treasure place y:0");
-
-		 //launch the search and verify that a treasure has been retrieved
-		 this.adventureLauncher.lookForTreasureOnPlace(this.adventurer);
-		 assertEquals(1,this.adventurer.getNumberTreasures(),"Adventurer should now have one treasure");
-		 assertEquals(9,this.treasurePlace.getNumberTreasures(),"treasure place should now have 9 treasures");
-
+	 	@ParameterizedTest
+	    @CsvSource({
+	    	"2, 2, 0, 10",
+	        "0, 0, 1, 9",
+	    })
+	 public void LookForTreasureTest(int xPosition,
+					int yPosition, int numberTreasuresAdventurer,int numberTreasuresTreasurePlace) {
+		/*Map looks like this:
+		  *   T - -
+		  *   - M A 
+		  *   - - - 
+		  * */
+	 	this.adventurer.setXPosition(xPosition);
+	 	this.adventurer.setYPosition(yPosition);
+		this.adventureLauncher.lookForTreasureOnPlace(this.adventurer);
+		assertEquals(numberTreasuresAdventurer,this.adventurer.getNumberTreasures(),"Adventurer's number of treasures should be : "+numberTreasuresAdventurer);
+		assertEquals(numberTreasuresTreasurePlace,this.treasurePlace.getNumberTreasures(),"Treasure places number of treasures should be : "+numberTreasuresTreasurePlace);
 	 }
 	 
-	 @Test
-	 public void SettleOnPlaceTesting() {
-		 //Make adventurer step on the mountain
-		 this.adventurer.moveForward();
-		 assertEquals(1,this.adventurer.getYPosition(),"Adventurer should be on mountain (y:1)");
-		 assertEquals(1,this.adventurer.getXPosition(),"Adventurer should be on mountain (x:1)");
-		 this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
-		 assertEquals(0,this.adventurer.getYPosition(),"Adventurer should be back at its original place (y:0)");
-		 assertEquals(1,this.adventurer.getXPosition(),"Adventurer should be back at its original place (x:1)");
-		 
-		 //Orient the adventurer to the north facing map border
-		 this.adventurer.turnRight();
-		 this.adventurer.turnRight();
-		 assertEquals(Orientation.NORD,this.adventurer.getOrientation(),"Adventurer should face North");
-		 assertEquals(0,this.adventurer.getYPosition(),"Adventurer should be on north border (y:0)");
-		 
-		 //Make adventurer step out of north map border 
-		 this.adventurer.moveForward();
-		 assertEquals(-1,this.adventurer.getYPosition(),"Adventurer should have crossed the North border (y:-1)");
-		 this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
-		 assertEquals(0,this.adventurer.getYPosition(),"Adventurer should be back on the north border (y:0)");
-		 
-		//Make adventurer go on treasure place and settle on it
-		 this.adventurer.turnLeft();
-		 this.adventurer.moveForward();
-		 assertEquals(0,this.adventurer.getYPosition(),"Adventurer should be on treasure place (y:0)");
-		 assertEquals(0,this.adventurer.getXPosition(),"Adventurer should be on treasure place (x:0)");
-		 this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
-		 assertEquals(1,this.adventurer.getNumberTreasures(),"Adventurer should now have one treasure after settling on treasure place");
-		 assertEquals(9,this.treasurePlace.getNumberTreasures(),"treasure place should now have 9 treasures left");
-		 
-		//Make adventurer step out of west map border 
-		 assertEquals(Orientation.OUEST,this.adventurer.getOrientation(),"Adventurer should face West");
-		 this.adventurer.moveForward();
-		 assertEquals(-1,this.adventurer.getXPosition(),"Adventurer should have crossed the west border (x:-1)");
-		 this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
-		 assertEquals(0,this.adventurer.getXPosition(),"Adventurer should be back on the west border (x:0)");
-		 
-		//Make adventurer go on empty space and settle on it
-		 this.adventurer.turnLeft();
-		 this.adventurer.moveForward();
-		 assertEquals(1,this.adventurer.getYPosition(),"Adventurer should be on empty place (y:1)");
-		 assertEquals(0,this.adventurer.getXPosition(),"Adventurer should be on empty place (x:0)");
-		 this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
-		 assertEquals(1,this.adventurer.getYPosition(),"Adventurer should be on the same spot after settling on empty space (y:1)");
-		 assertEquals(0,this.adventurer.getXPosition(),"Adventurer should be on the same spot after settling on empty space (x:0)");
-		 
-		//Make adventurer face south border
-		 this.adventurer.moveForward();
-		 assertEquals(Orientation.SUD,this.adventurer.getOrientation(),"Adventurer should face South");
-		 assertEquals(2,this.adventurer.getYPosition(),"Adventurer should be on south border (y:2)");
-		 this.adventurer.moveForward();
-		 assertEquals(3,this.adventurer.getYPosition(),"Adventurer should have crossed the south border (y:3)");
-		 this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
-		 assertEquals(2,this.adventurer.getYPosition(),"Adventurer should be back on the south border(y:2)");
-		 
-		//Make adventurer face East border
-		 this.adventurer.turnLeft();
-		 this.adventurer.moveForward();
-		 this.adventurer.moveForward();
-		 assertEquals(Orientation.EST,this.adventurer.getOrientation(),"Adventurer should face East");
-		 assertEquals(2,this.adventurer.getXPosition(),"Adventurer should be on east border (x:2)");
-		 this.adventurer.moveForward();
-		 assertEquals(3,this.adventurer.getXPosition(),"Adventurer should have crossed the east border (x:3)");
-		 this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
-		 assertEquals(2,this.adventurer.getXPosition(),"Adventurer should be back on east border (x:2)");
-		 
-		//Make adventurer step on other adventurer
-		 this.adventurer.turnLeft();
-		 this.adventurer.moveForward();
-		 assertEquals(1,this.adventurer.getYPosition(),"Adventurer should be on other adventurer (y:1)");
-		 assertEquals(2,this.adventurer.getXPosition(),"Adventurer should be on other adventurer (x:2)");
-		 this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
-		 assertEquals(2,this.adventurer.getYPosition(),"Adventurer should be back at its original place (y:2)");
-		 assertEquals(2,this.adventurer.getXPosition(),"Adventurer should be back at its original place (x:2)");
-		 
-		 //Final verification of number of treasures
-		 assertEquals(1,this.adventurer.getNumberTreasures(),"Finally the adventurer should have only one treasure");
-		 assertEquals(9,this.treasurePlace.getNumberTreasures(),"Finally the treasure place should have 9 treasures");
-	 }
+	 	@ParameterizedTest
+	    @CsvSource({
+	        "S, 1, 0",
+	        "S, 2, 0",
+	        "N, 1, 0",
+	        "O, 0, 1",
+	        "S, 2, 2",
+	        "E, 2, 2",
+	    })
+	 public void SettleOnUnsettablePlaceTesting(String beginOrientationStr, int xPosition,int yPosition) {
+		 /*Map looks like this:
+		  *   T - -
+		  *   - M A 
+		  *   - - - 
+		  * */
+		Orientation beginOrientation = Orientation.fromLetter(beginOrientationStr);
+		this.adventurer.setOrientation(beginOrientation);
+		Position beginPosition = new Position(xPosition,yPosition);
+		this.adventurer.setXPosition(xPosition);
+		this.adventurer.setYPosition(yPosition);
+		this.adventurer.moveForward();
+		this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
+		assertEquals(beginPosition,this.adventurer.getPosition(),"Adventurer should be back on position x : " +xPosition+", y : "+yPosition);
+	 	}
+	 	
+	 	
+	 	@ParameterizedTest
+	    @CsvSource({
+	        "O, 1, 0, 1",
+	        "O, 2, 2, 0",
+	    })
+	 public void SettleOnSettablePlaceTesting(String beginOrientationStr, int xPosition,
+			 								int yPosition, int numberTreasures) {
+		 /*Map looks like this:
+		  *   T - -
+		  *   - M A 
+		  *   - - - 
+		  * */
+		Orientation beginOrientation = Orientation.fromLetter(beginOrientationStr);
+		this.adventurer.setOrientation(beginOrientation);
+		Position endPosition = new Position(xPosition-1,yPosition);
+		this.adventurer.setXPosition(xPosition);
+		this.adventurer.setYPosition(yPosition);
+		this.adventurer.moveForward();
+		this.adventureLauncher.settleOnPlaceAndLookForTreasureOrMoveBackward(adventurer);
+		assertEquals(endPosition,this.adventurer.getPosition(),"Adventurer should be on position "+ endPosition.toString() +" but was on "+this.adventurer.getPosition().toString());
+		assertEquals(numberTreasures,this.adventurer.getNumberTreasures(),"Adventurer should have : " +numberTreasures);
+	 	
+	 	}
 	 
 	 @Test
 	 public void eachAdventurerMakeOneStepTest(){
@@ -231,8 +196,8 @@ public class AdventureLauncherTest {
 		 assertEquals(0,this.adventurer2.getXPosition(),"Second adventurer should be on position x:0");
 		 assertEquals(2,this.adventurer2.getYPosition(),"Second adventurer should be on position y:2");
 		 assertEquals(Orientation.SUD,this.adventurer2.getOrientation(),"Second adventurer should be facing North");
+		 
 		 assertEquals(1,this.adventurer2.getNumberTreasures(),"Second adventurer should have 1 treasure");
-
 		 assertEquals(7,this.treasurePlace.getNumberTreasures(),"Treasure place should have 7 treasures left");
 
 	 }
