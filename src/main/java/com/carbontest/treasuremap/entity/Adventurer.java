@@ -153,13 +153,8 @@ public class Adventurer extends Entity{
 		this.orientation = orientation;
 	}
 	
-	
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public List<AdventurerMove> getPattern() {

@@ -11,7 +11,6 @@ import com.carbontest.treasuremap.entity.BordersIntersection;
 import com.carbontest.treasuremap.entity.Mountain;
 import com.carbontest.treasuremap.entity.TreasurePlace;
 import com.carbontest.treasuremap.entity.base.IEntity;
-import com.carbontest.treasuremap.entity.utils.Position;
 import com.carbontest.treasuremap.enums.EntityType;
 import com.carbontest.treasuremap.utils.interfaces.IOutputFileWriter;
 
